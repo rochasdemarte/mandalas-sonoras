@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Chrome, Firefox OS and Opera -->
+    <meta name="theme-color" content="#a946fa">
+    <!-- Windows Phone -->
+    <meta name="msapplication-navbutton-color" content="#a946fa">
+    <!-- iOS Safari -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Mandalas Sonoras</title>
+    <meta name="description" content="Mandalas Sonoras é uma plataforma online, open source e interativa que a partir do sensor de som cria padrões de forma e cor.
+    Através da percepção de ritmo, volume, e tonalidade do som são gerados grafismos que constroem mandalas em uma relação sinestésica.
+    Cada ciclo dessa órbita de formas é uma reação ao som capturado pelo microfone, isso torna possível uma troca visual com o som, seja
+    uma música tocada, vozes faladas, ou ruídos do espaço, para cada som que o usuário explora é gerada uma nova possibilidade de interpretação sonora.">
+    <meta name="keywords" content="Mandalas, Sonoras, Mandalas Sonoras, Arte, Zunuy, Tipheret, Interação">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="rochas.de.marte">
+    <link rel="icon" href="">
+    <link href="https://fonts.googleapis.com/css2?family=Abel&family=Mada:wght@200;300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="lera.css">
+    <script src="addons/p5.min.js"></script>
+    <script src="addons/p5.dom.min.js"></script>
+    <script src="addons/p5.sound.js"></script>
+  </head>
+  <body>
+    <div class="side-bar">
+      <div class="menu-bar" onclick="showBar(this);">
+        <div class="barra1"></div>
+        <div class="barra2"></div>
+        <div class="barra3"></div>
+      </div>
+      <div class="nav-ferramentas">
+        <div class="dot"></div>
+        <button id="homepage" name="Página principal" class="btn ferramentas active"><i class="fa fa-home"></i></button>
+        <button name="Controles de Onda" class="btn ferramentas"><i class="fa fa-sliders"></i></button>
+        <div class="dot"></div>
+        <button name="Configurações" class="btn ferramentas"><i class="fa fa-gear"></i></button>
+        <button name="Tela cheia" class="btn ferramentas"><i class="fa fa-expand"></i></button>
+        <div class="dot"></div>
+        <button name="Adicionar Onda" class="btn ferramentas"><i class="fa fa-plus"></i></button>
+        <button name="Remover Onda" class="btn ferramentas"><i class="fa fa-minus"></i></button>
+      </div>
+      <div class="nav-ondas">
+        <a id="full-ctrl" onclick="openCtrl();" href="#ctrl-geral" name="ctrl-todas" class="btn ferramentas" style="border: 1px solid rgba(255, 255, 255, 0.5);"></a>
+        <div class="dot"></div>
+      </div>
+    </div>
+    <div class="sobre-div">
+      <h1 class="titulo">MANDALAS SONORAS</h1>
+      <h3>SOM É MOVIMENTO : &nbsp TUDO VIBRA</h3>
+      <div class="icon-container">
+        <a class="btn-icon" href="https://www.instagram.com/mandalas.sonoras/"><i class="fa fa-instagram"></i></a>
+        <a class="btn-icon" href="https://github.com/rochasdemarte/mandalas-sonoras/"><i class="fa fa-github"></i></a>
+      </div>
+      <button onclick="testar()" class="btn-entrar">Testar agora</button>
+      <button onclick="zerar()" class="btn-entrar">Iniciar do zero</button>
+      <hr>
+      <p><mark>Mandalas Sonoras</mark> é uma plataforma online, open source e interativa que a partir do sensor de som cria padrões de forma e cor.</p>
+      <p>Através da percepção de ritmo, volume, e tonalidade do som são gerados grafismos que constroem mandalas em uma relação sinestésica.</p><p>
+      Cada ciclo dessa órbita de formas é uma reação ao som capturado pelo microfone, isso torna possível uma troca visual com o som, seja
+      uma música tocada, vozes faladas, ou ruídos do espaço, para cada som que o usuário explora é gerada uma nova possibilidade de interpretação sonora.
+      </p>
+      <h2>_ Sobre o projeto</h2>
+      <p>Idealizado pelos artistas <mark>Maria Ana</mark> e <mark>Pedro Rocha Martin</mark>,
+         o projeto Mandalas Sonoras foi desenvolvido durante o ano de 2020 e possibilitado pelo
+         Fundo de Apoio à Cultura - PRÓ-CULTURA RS FAC, através do Edital FAC Digital RS.
+      </p>
+      <p>
+        O projeto segue a filosofia do <mark>código aberto</mark> no intuito de difundir,
+        compartilhar, replicar, e misturar conhecimentos.</p><p> O código fonte pode ser acessado no
+         nosso <mark><a href="https://github.com/rochasdemarte/mandalas-sonoras">repositório oficial do GitHub</a></mark>,
+          ele é público e feito para ser remixado e resignificado.
+      </p>
+      <hr>
+      <h2>_ Interaja e compartilhe</h2>
+      <p>
+        Sinta-se à vontade para gravar e compartilhar sua tela ou fazer registros durante a sua interação.
+      </p>
+      <p>
+        Nossa página no Instagram <mark><a href="https://www.instagram.com/mandalas.sonoras/">@mandalas.sonoras</a></mark>
+        fica disponível para quem quiser nos marcar ou nos enviar sua experiência.
+      </p>
+      <hr>
+      <button onclick="testar()" class="btn-entrar">Testar agora</button>
+      <button onclick="zerar()" class="btn-entrar">Iniciar do zero</button>
+      <hr>
+    </div>
+    <div id="app-holder">
+    </div>
+    <div class="controle-geral">
+    </div>
+    <div class="config-div">
+      <label>CONFIGURAÇÕES</label>
+      <br><hr class="hr-ctrl">
+    </div>
+    <div class="explainer-div"></div>
+    <div class="info-div"></div>
+    <script type="text/javascript" src="app.js"></script>
+  </body>
+  <script type="text/javascript" src="browserHandle.js">
+  </script>
+</html>
