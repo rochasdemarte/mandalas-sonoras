@@ -37,6 +37,7 @@ let isMobile = (typeof window.orientation !== "undefined") || (navigator.userAge
 
 const explainerDiv = document.querySelector('.explainer-div');
 const infoDiv = document.querySelector('.info-div');
+const infoDivContainer = document.querySelector('.info-div-container');
 const home = document.querySelector('.sobre-div');
 const config = document.querySelector('.config-div');
 const controles = document.querySelector('.controle-geral');
@@ -135,27 +136,53 @@ function draw(){
   // spectrum retorna uma array com valores de 0 a 255.
   let spectrum = fft.analyze();
 
-  for (var i = 0; i < spectrum.length; i++) {
-    // spectrum[i] - de 0 até 255
-
-  }
-
   for(var o = 0; o < osc.length; o++){
-    //
+
+    //console.log(oscParam[o].filterValue+'  '+oscParam[o].filtro);
+
+    for (var i = 0; i < spectrum.length; i++) {
+      // spectrum[i] - de 0 até 255
+      if (oscParam[o].filtroOn == 1) {
+        oscParam[o].filterValue = spectrum[oscParam[o].filtro]/255;
+      } else {
+        oscParam[o].filterValue = 1.0;
+      }
+
+      // Filtro Vermelho
+      if (oscParam[o].filtroROn == 1) {
+        oscParam[o].filterRValue = spectrum[oscParam[o].filtroR]/255;
+      } else {
+        oscParam[o].filterRValue = 1.0;
+      }
+      // Filtro Verde
+      if (oscParam[o].filtroGOn == 1) {
+        oscParam[o].filterGValue = spectrum[oscParam[o].filtroG]/255;
+      } else {
+        oscParam[o].filterGValue = 1.0;
+      }
+      // Filtro Azul
+      if (oscParam[o].filtroBOn == 1) {
+        oscParam[o].filterBValue = spectrum[oscParam[o].filtroB]/255;
+      } else {
+        oscParam[o].filterBValue = 1.0;
+      }
+
+    }
+
     for (var t = 0; t < osc[o].length; t++) {
       //
       if (t < osc[o][t].hidelength) {
         osc[o][t].oscillate(
-          (t*oscParam[o].velocidade)*ampLevel*divide, // xRate
-          (t*oscParam[o].velocidade)*ampLevel*divide  // yRate
+          (t*oscParam[o].velocidade)*(ampLevel*oscParam[o].filterValue)*divide, // xRate
+          (t*oscParam[o].velocidade)*(ampLevel*oscParam[o].filterValue)*divide  // yRate
         );
         osc[o][t].display(
           width/2,  //  xLoc
           height/2, //  yLoc
           color(
-            (oscParam[o].r)-sin(2*angulo)*t/100, // Vermelho
-            oscParam[o].g,                        // Verde
-            oscParam[o].b-100*sin(angulo/10),    // Azul
+            (oscParam[o].filterRValue*oscParam[o].r)-sin(2*angulo)*t/100,   // Vermelho -sin(2*angulo)*t/100
+            (oscParam[o].filterGValue*oscParam[o].g),                       // Verde
+            (oscParam[o].filterBValue*oscParam[o].b)-100*sin(angulo/10),    // Azul
             oscParam[o].a-(t/oscDivide)          // Alpha
           )
         );
@@ -224,26 +251,60 @@ function setControlesOnda(ondaNum){
   <label for="orbita ${ondaNum}">Órbita</label>
   <input oninput="updateOscParam(${ondaNum}, 'orbita', this.value)" class="slider" type="range" name="orbita ${ondaNum}" min="0" max="400" step="0.5" value="${oscParam[ondaNum].orbita}">
   <br>
+  <label for="length ${ondaNum}">Comprimento</label>
+  <input oninput="updateOscParam(${ondaNum}, 'largura', this.value)" class="slider" type="range" name="length ${ondaNum}" min="0" max="${oscNum}" step="1" value="${oscParam[ondaNum].largura}">
+  <br>
   <label for="velocidade ${ondaNum}">Velocidade</label>
   <input oninput="updateOscParam(${ondaNum}, 'velocidade', this.value)" class="slider" type="range" name="velocidade ${ondaNum}" min="-0.05" max="0.05" step="0.0005" value="${oscParam[ondaNum].velocidade}">
   <br>
   <label for="tamanho ${ondaNum}">Tamanho</label>
   <input oninput="updateOscParam(${ondaNum}, 'diametro', this.value)" class="slider" type="range" name="tamanho ${ondaNum}" min="0.02" max="0.20" step="0.01" value="${oscParam[ondaNum].diametro}">
   <br>
-  <label for="length ${ondaNum}">Comprimento</label>
-  <input oninput="updateOscParam(${ondaNum}, 'largura', this.value)" class="slider" type="range" name="length ${ondaNum}" min="0" max="${oscNum}" step="1" value="${oscParam[ondaNum].largura}">
+  <hr class="hr-ctrl">
+  <label for="filtro ${ondaNum}">Filtro</label>
+  <input oninput="updateOscParam(${ondaNum}, 'filtro-on', this.value)" class="slider toggle" type="range" name="filtro-btn ${ondaNum}" min="0" max="1" step="1" value="${oscParam[ondaNum].filtroOn}">
   <br>
+  <div style="display: none;" name="filtro${ondaNum}">
+    <label>Grave / Agudo</label>
+    <input oninput="updateOscParam(${ondaNum}, 'filtro', this.value)" style="margin-top: 10px;" class="slider" type="range" min="0" max="600" step="1" value="${oscParam[ondaNum].filtro}">
+  </div>
   <hr class="hr-ctrl">
   <label>COR ONDA ${ondaNum}</label>
   <hr class="hr-ctrl">
   <label for="r ${ondaNum}">Vermelho</label>
+  <input oninput="updateOscParam(${ondaNum}, 'filtro-r-on', this.value)" class="slider toggle" type="range" name="filtro-btn-r ${ondaNum}" min="0" max="1" step="1" value="${oscParam[ondaNum].filtroROn}">
+  <br>
   <input oninput="updateOscParam(${ondaNum}, 'r', this.value)" class="slider" type="range" name="r ${ondaNum}" min="0" max="255" step="1" value="${oscParam[ondaNum].r}">
   <br>
+
+  <div style="display: none;" name="filtroR${ondaNum}">
+    <label>Grave / Agudo</label>
+    <input oninput="updateOscParam(${ondaNum}, 'filtro-r', this.value)" style="margin-top: 10px;" class="slider" type="range" min="0" max="600" step="1" value="${oscParam[ondaNum].filtroR}">
+  </div>
+  <hr class="hr-ctrl">
+
   <label for="g ${ondaNum}">Verde</label>
+  <input oninput="updateOscParam(${ondaNum}, 'filtro-g-on', this.value)" class="slider toggle" type="range" name="filtro-btn-g ${ondaNum}" min="0" max="1" step="1" value="${oscParam[ondaNum].filtroGOn}">
+  <br>
   <input oninput="updateOscParam(${ondaNum}, 'g', this.value)" class="slider" type="range" name="g ${ondaNum}" min="0" max="255" step="1" value="${oscParam[ondaNum].g}">
   <br>
+
+  <div style="display: none;" name="filtroG${ondaNum}">
+    <label>Grave / Agudo</label>
+    <input oninput="updateOscParam(${ondaNum}, 'filtro-g', this.value)" style="margin-top: 10px;" class="slider" type="range" min="0" max="600" step="1" value="${oscParam[ondaNum].filtroG}">
+  </div>
+  <hr class="hr-ctrl">
+
   <label for="b ${ondaNum}">Azul</label>
+  <input oninput="updateOscParam(${ondaNum}, 'filtro-b-on', this.value)" class="slider toggle" type="range" name="filtro-btn-b ${ondaNum}" min="0" max="1" step="1" value="${oscParam[ondaNum].filtroBOn}">
+  <br>
   <input oninput="updateOscParam(${ondaNum}, 'b', this.value)" class="slider" type="range" name="b ${ondaNum}" min="0" max="255" step="1" value="${oscParam[ondaNum].b}">
+  <hr class="hr-ctrl">
+
+  <div style="display: none;" name="filtroB${ondaNum}">
+    <label>Grave / Agudo</label>
+    <input oninput="updateOscParam(${ondaNum}, 'filtro-b', this.value)" style="margin-top: 10px;" class="slider" type="range" min="0" max="600" step="1" value="${oscParam[ondaNum].filtroB}">
+  </div>
   <hr class="hr-ctrl">
   `;
   controles.appendChild(ondaCtrl);
@@ -263,6 +324,17 @@ function updateOscParam(ondaNum, item, valor) {
     case 'velocidade':
       oscParam[ondaNum].velocidade = valor;
       break;
+    case 'filtro':
+      oscParam[ondaNum].filtro = valor;
+      break;
+    case 'filtro-on':
+      if (valor == '1') {
+        document.querySelector(`[name=filtro${ondaNum}]`).style.display = "block";
+      } else {
+        document.querySelector(`[name=filtro${ondaNum}]`).style.display = "none";
+      }
+      oscParam[ondaNum].filtroOn = valor;
+      break;
     case 'r':
       oscParam[ondaNum].r = valor;
       break;
@@ -271,6 +343,39 @@ function updateOscParam(ondaNum, item, valor) {
       break;
     case 'b':
       oscParam[ondaNum].b = valor;
+      break;
+    case 'filtro-r':
+      oscParam[ondaNum].filtroR = valor;
+      break;
+    case 'filtro-r-on':
+      if (valor == '1') {
+        document.querySelector(`[name=filtroR${ondaNum}]`).style.display = "block";
+      } else {
+        document.querySelector(`[name=filtroR${ondaNum}]`).style.display = "none";
+      }
+      oscParam[ondaNum].filtroROn = valor;
+      break;
+    case 'filtro-g':
+      oscParam[ondaNum].filtroG = valor;
+      break;
+    case 'filtro-g-on':
+      if (valor == '1') {
+        document.querySelector(`[name=filtroG${ondaNum}]`).style.display = "block";
+      } else {
+        document.querySelector(`[name=filtroG${ondaNum}]`).style.display = "none";
+      }
+      oscParam[ondaNum].filtroGOn = valor;
+      break;
+    case 'filtro-b':
+      oscParam[ondaNum].filtroB = valor;
+      break;
+    case 'filtro-b-on':
+      if (valor == '1') {
+        document.querySelector(`[name=filtroB${ondaNum}]`).style.display = "block";
+      } else {
+        document.querySelector(`[name=filtroB${ondaNum}]`).style.display = "none";
+      }
+      oscParam[ondaNum].filtroBOn = valor;
       break;
   }
 }
@@ -316,6 +421,21 @@ function setOscParam() {
     largura: oscNum,
 
     velocidade: 0.0025,
+    filtro: 0,
+    filtroOn: 0,
+    filterValue: 1.0,
+
+    filtroROn: 0,
+    filtroR: 0,
+    filterRValue: 1.0,
+
+    filtroGOn: 0,
+    filtroG: 0,
+    filterGValue: 1.0,
+
+    filtroBOn: 0,
+    filtroB: 0,
+    filteBValue: 1.0,
 
     r: random(0,255),
     g: random(0,255),
@@ -463,7 +583,7 @@ const tutFrases = [
   'Dê dois clicks na tela <br> para mostrar ou esconder <br> a barra de ferramentas'
   +`<br><br><button class="btn-tut" onclick="tutPlus(1)">Ok, entendi.</button>`,
 
-  'Gostaria de iniciar<br>um rápido tutorial?'
+  'Gostaria de iniciar<br>um tutorial rápido?'
   +'<br><br><button class="btn-tut" onclick="tutPlus(2)">Sim</button>'
   +'<button class="btn-tut" onclick="tutPlus(8)">Não</button>',
 
@@ -497,10 +617,17 @@ function tutorial() {
   if (tutorialCounter > -1) {
     infoDiv.innerHTML = tutFrases[tutorialCounter];
     infoDiv.style.top = "60px";
-    infoDiv.style.right = "60px";
+    infoDiv.style.right = "80px";
     infoDiv.style.visibility = 'visible';
     infoDiv.style.opacity = 1;
+    if (tutorialCounter === 2) {
+      infoDivContainer.style.visibility = 'visible';
+      infoDivContainer.style.opacity = 1;
+      infoDivContainer.style.zIndex = 98;
+    }
   } else {
+    infoDivContainer.style.visibility = 'hidden';
+    infoDivContainer.style.opacity = 0;
     infoDiv.style.visibility = 'hidden';
     infoDiv.style.opacity = 0;
   }

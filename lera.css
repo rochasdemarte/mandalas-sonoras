@@ -81,7 +81,7 @@ h3 {
   visibility: hidden;
   opacity: 0;
   position: absolute;
-  z-index: 99;
+  z-index: 95;
   padding: 20px 10px;
   transition: 0.2s;
   -webkit-user-select: none; /* Safari */
@@ -95,11 +95,11 @@ h3 {
   text-align: center;
   background: rgb(170,70,250);
   font-size: 1.3em;
+  visibility: hidden;
+  opacity: 0;
 /*  background: rgba(0, 0, 0, 0.9);
   border: 1px solid rgb(150,150,150);*/
   box-shadow: 1px 1px 6px rgba(0,0,0,0.2);
-  visibility: hidden;
-  opacity: 0;
   position: absolute;
   z-index: 99;
   padding: 20px 10px;
@@ -108,6 +108,15 @@ h3 {
   -moz-user-select: none; /* Firefox */
   -ms-user-select: none; /* IE10+/Edge */
   user-select: none; /* Standard */
+}
+.info-div-container {
+  position: fixed;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  visibility: hidden;
+  opacity: 0;
 }
 .ctrl-onda {
   display: none;
@@ -406,6 +415,11 @@ h3 {
   background: rgb(0, 0, 0);
   cursor: pointer;
 }
+.toggle {
+  height: 10px;
+  width: 50px;
+}
+
 /* Extra small devices (phones, 600px and down) */
 @media screen and (max-width: 600px) {
 
