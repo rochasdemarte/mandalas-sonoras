@@ -1,4 +1,5 @@
 # Mandalas Sonoras
+[Acesse a plataforma](https://mandalas-sonoras.web.app/)
 Mandalas Sonoras é uma plataforma online, open source e interativa que a partir do sensor de som cria padrões de forma e cor.
 
 Através da percepção de ritmo, volume, e tonalidade do som são gerados grafismos que constroem mandalas em uma relação sinestésica.
